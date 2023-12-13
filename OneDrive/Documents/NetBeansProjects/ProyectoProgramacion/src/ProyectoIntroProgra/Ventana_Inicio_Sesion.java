@@ -1,5 +1,7 @@
 package ProyectoIntroProgra;
 
+import javax.swing.JOptionPane;
+import ProyectoIntroProgra.Usuario;
 public class Ventana_Inicio_Sesion extends javax.swing.JFrame {
 
     public Ventana_Inicio_Sesion() {
@@ -11,7 +13,6 @@ public class Ventana_Inicio_Sesion extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        IniAceptar = new javax.swing.JButton();
         InciarSesion = new javax.swing.JButton();
         RegiUsuario = new javax.swing.JButton();
 
@@ -23,13 +24,6 @@ public class Ventana_Inicio_Sesion extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Sistema de Parqueos del Oeste");
         jLabel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder("")));
-
-        IniAceptar.setText("Usuarios Registrados");
-        IniAceptar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                IniAceptarActionPerformed(evt);
-            }
-        });
 
         InciarSesion.setText("Iniciar Sesion");
         InciarSesion.addActionListener(new java.awt.event.ActionListener() {
@@ -49,41 +43,60 @@ public class Ventana_Inicio_Sesion extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(46, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 607, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40))
             .addGroup(layout.createSequentialGroup()
                 .addGap(301, 301, 301)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(IniAceptar)
                     .addComponent(RegiUsuario)
                     .addComponent(InciarSesion))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 305, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(73, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 564, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(56, 56, 56))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(jLabel1)
-                .addGap(72, 72, 72)
+                .addGap(25, 25, 25)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(51, 51, 51)
                 .addComponent(InciarSesion)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(29, 29, 29)
                 .addComponent(RegiUsuario)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(IniAceptar)
-                .addContainerGap(170, Short.MAX_VALUE))
+                .addContainerGap(172, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void InciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InciarSesionActionPerformed
-Inicio_Sesion.IniciarSesion();
 
-    VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
-    ventanaPrincipal.setVisible(true);
-    dispose();
+    // Obtener la lista de usuarios
+    Usuario[] usuarios = UsuarioManager.getUsuarios();
+
+    // Iniciar sesión
+    Usuario usuarioSesion = Inicio_Sesion.IniciarSesion(usuarios);
+
+    // Verificar si el inicio de sesión fue exitoso
+    if (usuarioSesion != null) {
+        // Verificar el tipo de usuario
+        if (usuarioSesion.getTipoUsuario() == TipoUsuario.CLIENTE) {
+            // Usuario es cliente, abrir VentanaPrincipal
+            VentanaPrincipal ventanaPrincipal = new VentanaPrincipal();
+            ventanaPrincipal.setVisible(true);
+        } else if (usuarioSesion.getTipoUsuario() == TipoUsuario.ADMINISTRADOR) {
+            // Usuario es administrador, abrir VentanaAdministrador
+            VentanaAdministrador ventanaAdministrador = new VentanaAdministrador();
+            ventanaAdministrador.setVisible(true);
+        }
+        // Cerrar la ventana actual
+        dispose();
+    } else {
+        // Mostrar mensaje de error si el inicio de sesión no fue exitoso
+        JOptionPane.showMessageDialog(null, "Nombre de usuario o contraseña incorrectos. Inténtelo nuevamente.",
+                "Error de inicio de sesión", JOptionPane.ERROR_MESSAGE);
+    }
+
     }//GEN-LAST:event_InciarSesionActionPerformed
 
     private void RegiUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegiUsuarioActionPerformed
@@ -91,15 +104,9 @@ UsuarioManager.agregarUsuarios();
  UsuarioManager.mostrarInformacionUsuarios();
     }//GEN-LAST:event_RegiUsuarioActionPerformed
 
-    private void IniAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IniAceptarActionPerformed
-        
-    }//GEN-LAST:event_IniAceptarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
+        
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -132,7 +139,6 @@ UsuarioManager.agregarUsuarios();
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton InciarSesion;
-    private javax.swing.JButton IniAceptar;
     private javax.swing.JButton RegiUsuario;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables

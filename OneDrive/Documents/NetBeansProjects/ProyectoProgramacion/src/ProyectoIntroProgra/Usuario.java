@@ -1,6 +1,9 @@
 package ProyectoIntroProgra;
 import javax.swing.JOptionPane;
 
+enum TipoUsuario {
+    CLIENTE, ADMINISTRADOR
+}
 public class Usuario {
     //Atributos del usuario
     private String nombre;
@@ -9,15 +12,17 @@ public class Usuario {
     private String password;
     private boolean estado;
     private String correo;
+    private TipoUsuario tipoUsuario;
     
     //Constructor con los atributos 
-    public Usuario(String nombre, String apellidos, String usuario, String password, boolean estado, String correo){
+    public Usuario(String nombre, String apellidos, String usuario, String password, boolean estado, String correo, TipoUsuario tipoUsuario){
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.usuario = usuario;
         this.password = password;
         this.estado = estado;
         this.correo = correo;
+        this.tipoUsuario = tipoUsuario;
     }
     
     // Métodos getters y setters para los atributos del usuario
@@ -75,6 +80,14 @@ public class Usuario {
     public void setCorreo(String correo){
         this.correo = correo;
     }
+    // Getters y setters para el atributo tipoUsuario
+    public TipoUsuario getTipoUsuario(){
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(TipoUsuario tipoUsuario){
+        this.tipoUsuario = tipoUsuario;
+    }
     
     //Metodo para agregar los datos del usuario
     public static void Agregar() {
@@ -85,8 +98,15 @@ public class Usuario {
         String password = JOptionPane.showInputDialog(null, "Ingrese su contraseña:");
         String correo = JOptionPane.showInputDialog(null, "Ingrese su correo electrónico:");
         boolean estado = true;
+        int opcionTipoUsuario = Integer.parseInt(JOptionPane.showInputDialog(null,
+                "Seleccione el tipo de usuario:\n1. Cliente\n2. Administrador"));
 
-        Usuario registroUsuarios = new Usuario(nombre, apellidos, usuario, password, estado, correo);
+        // Validar la opción del usuario y asignar el tipo correspondiente
+        TipoUsuario tipoUsuario = (opcionTipoUsuario == 1) ? TipoUsuario.CLIENTE : TipoUsuario.ADMINISTRADOR;
+
+        Usuario registroUsuarios = new Usuario(nombre, apellidos, usuario, password, estado, correo, tipoUsuario);
+
+        
 
         // Mostrar información del usuario 
         String mensaje = "Información del Usuario:\n" +
@@ -126,8 +146,15 @@ class UsuarioManager {
         String correo = JOptionPane.showInputDialog(null, "Ingrese su correo electrónico:");
         boolean estado = true;
 
+    // Solicitar el tipo de usuario (1 para Cliente, 2 para Administrador)
+        int opcionTipoUsuario = Integer.parseInt(JOptionPane.showInputDialog(null,
+                "Seleccione el tipo de usuario:\n1. Cliente\n2. Administrador"));
+
+        // Validar la opción del usuario y asignar el tipo correspondiente
+        TipoUsuario tipoUsuario = (opcionTipoUsuario == 1) ? TipoUsuario.CLIENTE : TipoUsuario.ADMINISTRADOR;
+
         // Crear un nuevo objeto Usuario y asignarlo al array
-        usuarios[indice] = new Usuario(nombre, apellidos, usuario, password, estado, correo);
+        usuarios[indice] = new Usuario(nombre, apellidos, usuario, password, estado, correo, tipoUsuario);
     }
 
     // Método para mostrar la información de todos los usuarios
@@ -153,6 +180,10 @@ class UsuarioManager {
 
             JOptionPane.showMessageDialog(null, mensaje, "Información del Usuario", JOptionPane.INFORMATION_MESSAGE);
         }
+    }
+
+    public static Usuario[] getUsuarios() {
+        return usuarios;
     }
 }
 

@@ -1,8 +1,7 @@
 package ProyectoIntroProgra;
-
 public class Espacio {
     
-    public class EspacioParqueo {
+    public static class EspacioParqueo {
     private int id;  // Identificador único del espacio
     private boolean discapacitado;
     private boolean cargaElectrica;
@@ -73,6 +72,7 @@ public class Espacio {
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
+    
     // Método para editar la información de un espacio
     public void editarEspacio(boolean discapacitado, boolean cargaElectrica, boolean techado, boolean descubierto) {
         this.discapacitado = discapacitado;
@@ -82,100 +82,5 @@ public class Espacio {
     }
     
     
-    public class Parqueo {
-    private static final int MAX_ESPACIOS = 100;  // Número máximo de espacios
-    private EspacioParqueo[] espacios;
-    private int cantidadEspacios;  // Número actual de espacios
-    
-    // Constructor
-    public Parqueo() {
-        espacios = new EspacioParqueo[MAX_ESPACIOS];
-        cantidadEspacios = 0;
     }
-    
-    // Método privado para verificar si todos los espacios están libres
-    private boolean espaciosLibres() {
-        for (EspacioParqueo espacio : espacios) {
-            if (espacio != null) {
-                return false; // Hay al menos un espacio ocupado
-            }
-        }
-        return true; // Todos los espacios están libres
-    }
-    
-    
-    // Método privado para desplazar los espacios y hacer espacio para uno nuevo
-    private void desplazarEspacios() {
-        for (int i = cantidadEspacios; i > 0; i--) {
-            espacios[i] = espacios[i - 1];
-        }
-        cantidadEspacios++;
-    }
-
-    
-    // Método para agregar un nuevo espacio de parqueo
-    public void agregarEspacio(int id, boolean discapacitado, boolean cargaElectrica, boolean techado, boolean descubierto) {
-        if (espaciosLibres()) {
-            // Resto del código para agregar un espacio (como se hizo anteriormente)
-            if (cantidadEspacios < MAX_ESPACIOS) {
-                // Si es un espacio discapacitado, insertarlo al principio
-                if (discapacitado) {
-                    desplazarEspacios();
-                    espacios[0] = new EspacioParqueo(id, discapacitado, cargaElectrica, techado, descubierto);
-                } else {
-                    espacios[cantidadEspacios++] = new EspacioParqueo(id, discapacitado, cargaElectrica, techado, descubierto);
-                }
-            } else {
-                System.out.println("Error: Se alcanzó el límite de espacios en el parqueo.");
-            }
-        } else {
-            System.out.println("Error: Todos los espacios deben estar libres para agregar un nuevo espacio.");
-        }
-    }
-    
-    // Método para editar la información de un espacio
-    public void editarEspacio(int id, boolean discapacitado, boolean cargaElectrica, boolean techado, boolean descubierto) {
-        if (espaciosLibres()) {
-            
-            for (int i = 0; i < cantidadEspacios; i++) {
-                if (espacios[i].getId() == id) {
-                    espacios[i].editarEspacio(discapacitado, cargaElectrica, techado, descubierto);
-
-                    // Si se convierte en espacio discapacitado, ajustar la numeración
-                    if (discapacitado && i > 0) {
-                        intercambiarEspacios(i, 0);
-                    }
-
-                    break;
-                }
-            }
-        } else {
-            System.out.println("Error: Todos los espacios deben estar libres para editar un espacio.");
-        }
-    }
-    
-    // Método para inactivar un espacio
-    public void inactivarEspacio(int id) {
-        if (espaciosLibres()) {
-            // Resto del código para inactivar un espacio (como se hizo anteriormente)
-            for (int i = 0; i < cantidadEspacios; i++) {
-                if (espacios[i].getId() == id) {
-                    espacios[i].setActivo(false);
-                    break;
-                }
-            }
-        } else {
-            System.out.println("Error: Todos los espacios deben estar libres para inactivar un espacio.");
-        }
-    }
-    
-    // Método privado para intercambiar la posición de dos espacios
-    private void intercambiarEspacios(int indice1, int indice2) {
-        EspacioParqueo temp = espacios[indice1];
-        espacios[indice1] = espacios[indice2];
-        espacios[indice2] = temp;
-    }
-
-}
-}
 }
